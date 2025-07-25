@@ -1,19 +1,38 @@
 import {CommandsRegistry, registerCommand, runCommand} from "./commands_registry";
 import {handlerLogin} from "./handler_login";
+import {handlerRegister} from "./handler_register";
 import * as process from "node:process";
+import {handlerReset} from "./handler_reset";
+import {handlerUsers} from "./handler_users";
 
-function main() {
-	const registry: CommandsRegistry = {};
-	registerCommand(registry, "login", handlerLogin)
+async function main() {
+	const args = process.argv.slice(2);
 
-	if (process.argv.length < 3) {
-		console.log("Invalid number of arguments");
+	if (args.length < 1) {
+		console.log("usage: cli <command> [args...]");
 		process.exit(1);
 	}
 
-	const cmdName = process.argv[2];
-	const args = process.argv.slice(3);
-	runCommand(registry, cmdName, ...args);
+	const cmdName = args[0];
+	const cmdArgs = args.slice(1);
+	const commandsRegistry: CommandsRegistry = {};
+
+	registerCommand(commandsRegistry, "login", handlerLogin);
+	registerCommand(commandsRegistry, "register", handlerRegister);
+	registerCommand(commandsRegistry, "reset", handlerReset);
+	registerCommand(commandsRegistry, "users", handlerUsers);
+
+	try {
+		await runCommand(commandsRegistry, cmdName, ...cmdArgs);
+	} catch (err) {
+		if (err instanceof Error) {
+			console.error(`Error running command ${cmdName}: ${err.message}`);
+		} else {
+			console.error(`Error running command ${cmdName}: ${err}`);
+		}
+		process.exit(1);
+	}
+	process.exit(0);
 }
 
-main();
+await main();

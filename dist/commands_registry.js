@@ -1,10 +1,10 @@
 export function registerCommand(registry, cmdName, handler) {
     registry[cmdName] = handler;
 }
-export function runCommand(registry, cmdName, ...args) {
+export async function runCommand(registry, cmdName, ...args) {
     const handler = registry[cmdName];
     if (!handler) {
-        throw new Error('Invalid command');
+        throw new Error(`Unknown command: ${cmdName}`);
     }
-    handler(cmdName, args);
+    await handler(cmdName, ...args);
 }
