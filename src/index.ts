@@ -4,6 +4,9 @@ import {handlerRegister} from "./handler_register";
 import * as process from "node:process";
 import {handlerReset} from "./handler_reset";
 import {handlerUsers} from "./handler_users";
+import {handlerAgg} from "./handler_agg";
+import {handlerAddFeed} from "./handler_addfeed";
+import {handlerFeeds} from "./handler_feeds";
 
 async function main() {
 	const args = process.argv.slice(2);
@@ -21,6 +24,9 @@ async function main() {
 	registerCommand(commandsRegistry, "register", handlerRegister);
 	registerCommand(commandsRegistry, "reset", handlerReset);
 	registerCommand(commandsRegistry, "users", handlerUsers);
+	registerCommand(commandsRegistry, "agg", handlerAgg);
+	registerCommand(commandsRegistry, "addfeed", handlerAddFeed);
+	registerCommand(commandsRegistry, "feeds", handlerFeeds);
 
 	try {
 		await runCommand(commandsRegistry, cmdName, ...cmdArgs);
