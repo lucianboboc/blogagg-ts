@@ -1,13 +1,12 @@
 import {createFeed} from "./lib/db/queries/feeds";
-import {readConfig} from "./config";
+import {SelectUser} from "./lib/db/schema";
 
-export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(cmdName: string, user: SelectUser, ...args: string[]) {
 	if (args.length !== 2) {
 		throw new Error("Argument must contain feed name and url");
 	}
 
-	const username = readConfig().currentUserName;
 	const [title, url] = args;
 
-	await createFeed({title, url}, username);
+	await createFeed({title, url}, user.name);
 }

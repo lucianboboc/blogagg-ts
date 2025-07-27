@@ -1,4 +1,5 @@
 import {CommandHandler} from './command_handler.js';
+import {SelectUser} from "./lib/db/schema";
 
 export type CommandsRegistry = {
 	[cmdName: string]: CommandHandler;
@@ -16,3 +17,5 @@ export async function runCommand(registry: CommandsRegistry, cmdName: string, ..
 
 	await handler(cmdName, ...args);
 }
+
+export type UserCommandHandler = (cmdName: string, user: SelectUser, ...args: string[]) => Promise<void> | void;
