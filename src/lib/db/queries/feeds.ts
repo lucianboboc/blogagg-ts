@@ -1,6 +1,6 @@
-import {eq, inArray} from 'drizzle-orm';
+import {eq, sql, inArray} from 'drizzle-orm';
 import {db} from "../index";
-import {feeds} from "../schema";
+import {feeds, SelectFeed} from "../schema";
 import {printFeed} from "../../../helpers";
 import {getUser} from "./users";
 import {createFeedFollow} from "./feed_follow";
@@ -41,4 +41,22 @@ export async function getFeedsByIDs(ids: string[]) {
 
 export async function getFeedByURL(url: string) {
 	return db.select().from(feeds).where(eq(feeds.url, url));
+}
+
+export async function markFeedFetched(feedId: string) {
+	const now = new Date();
+	await db.update(feeds)
+		.set({
+			updated_at: now,
+			last_fetched_at: now
+		})
+		.where(eq(feeds.id, feedId));
+}
+
+export async function getNextFeedToFetch() {
+	const [result] = await db.select()
+		.from(feeds)
+		.orderBy(sql`${feeds.last_fetched_at} desc nulls first`)
+		.limit(1);
+	return result as SelectFeed;
 }
