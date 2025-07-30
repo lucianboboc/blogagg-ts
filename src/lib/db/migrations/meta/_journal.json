@@ -36,6 +36,20 @@
       "when": 1753734555427,
       "tag": "0004_orange_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1753911803198,
+      "tag": "0005_panoramic_ultimo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1753912396273,
+      "tag": "0006_flaky_giant_man",
+      "breakpoints": true
     }
   ]
 }
